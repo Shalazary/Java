@@ -135,6 +135,15 @@ public class List {
         return s;
     }
 
+    public int[] toArray() {
+        int array[] = new int[size];
+        for (int i = 0; i < size; i++) {
+            array[i] = getValueAt(i);
+        }
+
+        return array;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj == this)
