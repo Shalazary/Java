@@ -42,6 +42,13 @@ public class List {
         tail = null;
     }
 
+    public List(int array[]) {
+        size = array.length;
+        for (int i = 0; i < size; i++) {
+            insertBack(array[i]);
+        }
+    }
+
     public int lenght() {
         return size;
     }
@@ -126,5 +133,25 @@ public class List {
                 s += " -> " + getValueAt(i);
         }
         return s;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this)
+            return true;
+
+        if (obj == null || obj.getClass() != this.getClass())
+            return false;
+
+        List that = (List) obj;
+
+        if (lenght() != that.lenght())
+            return false;
+
+        for (int i = 0; i < lenght(); i++)
+            if (getValueAt(i) != that.getValueAt(i))
+                return false;
+
+        return true;
     }
 }
