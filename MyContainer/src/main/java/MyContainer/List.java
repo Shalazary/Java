@@ -43,8 +43,7 @@ public class List {
     }
 
     public List(int array[]) {
-        size = array.length;
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < array.length; i++) {
             insertBack(array[i]);
         }
     }
@@ -72,13 +71,14 @@ public class List {
     }
 
     public void insertAt(int index, int value) throws IndexOutOfBoundsException {
-        if (index < 0 || index >= size)
+        if (index < 0 || index > size)
             throw new IndexOutOfBoundsException("Index " + index + " out of bounds");
 
-        if (size == 0 || index == size - 1) {
+        if (size == 0 || index == size) {
             insertBack(value);
         } else if (index == 0) {
             head = new ListNode(head, value);
+            size++;
         } else {
             ListNode current = getNodeAt(index - 1);
             current.setNext(new ListNode(current.getNext(), value));
@@ -154,10 +154,10 @@ public class List {
 
         List that = (List) obj;
 
-        if (lenght() != that.lenght())
+        if (size != that.lenght())
             return false;
 
-        for (int i = 0; i < lenght(); i++)
+        for (int i = 0; i < size; i++)
             if (getValueAt(i) != that.getValueAt(i))
                 return false;
 
