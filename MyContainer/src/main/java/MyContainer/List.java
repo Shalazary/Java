@@ -46,21 +46,28 @@ public class List {
         return size;
     }
 
-    private ListNode getNodeAt(int index) {
-        // if(index < 0 || index >= size)
+    private ListNode getNodeAt(int index) throws IndexOutOfBoundsException {
+        if (index < 0 || index >= size)
+            throw new IndexOutOfBoundsException("Index " + index + " out of bounds");
+
         ListNode current = head;
         for (int i = 0; i < index; i++)
             current = current.getNext();
+
         return current;
     }
 
-    public int getValueAt(int index) {
-        // if(index < 0 || index >= size)
+    public int getValueAt(int index) throws IndexOutOfBoundsException {
+        if (index < 0 || index >= size)
+            throw new IndexOutOfBoundsException("Index " + index + " out of bounds");
+
         return getNodeAt(index).getValue();
     }
 
-    public void insertAt(int index, int value) {
-        // if(index < 0 || index >= size)
+    public void insertAt(int index, int value) throws IndexOutOfBoundsException {
+        if (index < 0 || index >= size)
+            throw new IndexOutOfBoundsException("Index " + index + " out of bounds");
+
         if (size == 0 || index == size - 1) {
             insertBack(value);
         } else if (index == 0) {
@@ -95,8 +102,10 @@ public class List {
         size++;
     }
 
-    public void removeAt(int index) {
-        // if(index < 0 || index >= size)
+    public void removeAt(int index) throws IndexOutOfBoundsException {
+        if (index < 0 || index >= size)
+            throw new IndexOutOfBoundsException("Index " + index + " out of bounds");
+
         if (index == 0) {
             head = head.getNext();
         } else {
@@ -112,10 +121,9 @@ public class List {
     public String toString() {
         String s = new String();
         if (size > 0) {
-            for (int i = 0; i < size - 1; i++) {
-                s += getValueAt(i) + " -> ";
-            }
-            s += tail.getValue();
+            s += getValueAt(0);
+            for (int i = 1; i < size; i++)
+                s += " -> " + getValueAt(i);
         }
         return s;
     }
