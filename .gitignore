@@ -8,12 +8,15 @@
 *.ear
 *.nar
 hs_err_pid*
+.classpath
+.project
 
 ##############################
 ## Visual Studio Code
 ##############################
 .vscode/
 .code-workspace
+.settings
 
 ##############################
 ## Maven
