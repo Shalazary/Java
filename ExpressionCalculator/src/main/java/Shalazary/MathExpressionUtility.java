@@ -1,62 +1,31 @@
 package Shalazary;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Stack;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.regex.Pattern;
 
 public class MathExpressionUtility {
 
-    private static final HashMap<String, Integer> operatorsPriority = new HashMap<String, Integer>() {
-        {
-            put("(", 0);
-            put(")", 1);
-            put("+", 2);
-            put("-", 2);
-            put("*", 3);
-            put("/", 3);
-            put("^", 4);
-        }
-    };
-
     public static String[] tokenize(String expression) {
+        if (expression.isEmpty())
+            return new String[0];
+    
         expression = expression.replace(" ", "");
         String[] tokenizedExpresion = expression.split("(?<=[-+*/^()])|(?=[-+*/^()])");
 
         return tokenizedExpresion;
     }
 
-    public static String[] toPostfix(String[] tokenizedExpression) {
-        Stack<String> operatorsStack = new Stack<String>();
-        List<String> result = new ArrayList<String>();
+    public static Set<String> getVariables(String[] tokenizedExpression) {
+        Set<String> arguments = new HashSet<String>();
+        for (String token : tokenizedExpression)
+            if (Pattern.matches("^[a-zA-Z_][a-zA-Z_0-9]*$", token))
+                arguments.add(token);
 
-        for (String token : tokenizedExpression) {
-            if (token.equals("(")) {
-                operatorsStack.push(token);
-            } else if (token.equals(")")) {
-                while (!operatorsStack.peek().equals("("))
-                    result.add(operatorsStack.pop());
-                operatorsStack.pop();
-            } else if (!operatorsPriority.containsKey(token)) {
-                result.add(token);
-            } else {
-                while (!operatorsStack.isEmpty()
-                        && operatorsPriority.get(operatorsStack.peek()) >= operatorsPriority.get(token))
-                    result.add(operatorsStack.pop());
-
-                operatorsStack.push(token);
-            }
-        }
-
-        while (!operatorsStack.isEmpty())
-            result.add(operatorsStack.pop());
-
-        String[] resultArray = new String[result.size()];
-        resultArray = result.toArray(resultArray);
-        return resultArray;
+        return arguments;
     }
 
-    public static String[] toPostfix(String expression) {
-        return toPostfix(tokenize(expression));
+    public static Set<String> getVariables(String expression) {
+        return getVariables(tokenize(expression));
     }
 }
