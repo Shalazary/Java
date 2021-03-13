@@ -1,30 +1,34 @@
 package Shalazary;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import java.util.Stack;
 
 public class MathExpressionUtility {
 
-    public static String[] tokenize(String expression, Collection<String> operators) {
-        String op = "";
-        for (String item : operators)
-            op += item;
+    private static final HashMap<String, Integer> operatorsPriority = new HashMap<String, Integer>() {
+        {
+            put("(", 0);
+            put(")", 1);
+            put("+", 2);
+            put("-", 2);
+            put("*", 3);
+            put("/", 3);
+            put("^", 4);
+        }
+    };
 
+    public static String[] tokenize(String expression) {
         expression = expression.replace(" ", "");
-        String[] tokenizedExpresion = expression.split("(?<=[op()])|(?=[op()])".replace("op", op));
+        String[] tokenizedExpresion = expression.split("(?<=[-+*/^()])|(?=[-+*/^()])");
 
         return tokenizedExpresion;
     }
 
-    public static String[] toPostfix(String[] tokenizedExpression, Map<String, Integer> operatorsPriority) {
+    public static String[] toPostfix(String[] tokenizedExpression) {
         Stack<String> operatorsStack = new Stack<String>();
         List<String> result = new ArrayList<String>();
-
-        operatorsPriority.put("(", 0);
 
         for (String token : tokenizedExpression) {
             if (token.equals("(")) {
@@ -52,8 +56,7 @@ public class MathExpressionUtility {
         return resultArray;
     }
 
-    public static String[] toPostfix(String expression, Map<String, Integer> operatorsPriority) {
-        Set<String> operators = operatorsPriority.keySet();
-        return toPostfix(tokenize(expression, operators), operatorsPriority);
+    public static String[] toPostfix(String expression) {
+        return toPostfix(tokenize(expression));
     }
 }
