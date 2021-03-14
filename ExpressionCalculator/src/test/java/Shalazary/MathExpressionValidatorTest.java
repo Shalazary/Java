@@ -33,24 +33,24 @@ public class MathExpressionValidatorTest {
     @Test
     public void successfulBrackedBalanceValidateTest() {
         String expression = "(a + b - c + (v / c + (8)) ^ 5) + (1 + 2) - 15 ";
-        assertTrue(MathExpressionValidator.brackedBalanceValidate(expression));
+        assertTrue(MathExpressionValidator.bracketBalanceValidate(expression));
     }
 
     @Test
     public void openBrackedDisbalanceTest() {
         String expression = "(a + b - c + (v / c + ((8)) ^ 5) + (1 + 2) - 15 ";
-        assertFalse(MathExpressionValidator.brackedBalanceValidate(expression));
+        assertFalse(MathExpressionValidator.bracketBalanceValidate(expression));
     }
 
     @Test
     public void closeBrackedDisbalanceTest() {
         String expression = "(a + b) - c + (v / c + (8)) ^ 5) + (1 + 2) - 15 ";
-        assertFalse(MathExpressionValidator.brackedBalanceValidate(expression));
+        assertFalse(MathExpressionValidator.bracketBalanceValidate(expression));
     }
 
     @Test
     public void wrongBrackedOrderTest() {
         String expression = "(a)) + ((b)";
-        assertFalse(MathExpressionValidator.brackedBalanceValidate(expression));
+        assertFalse(MathExpressionValidator.bracketBalanceValidate(expression));
     }
 }
