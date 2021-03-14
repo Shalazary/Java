@@ -8,13 +8,18 @@ import java.util.Set;
 import java.util.Stack;
 import java.util.regex.Pattern;
 
+/**
+ * Class for calculating string expressions with standard math operations and
+ * variables
+ */
 public class ExpressionCalculator {
     private String ExpressionString;
     private String[] TokenizedExpression;
     private String[] PostfixExpression;
+    /** Table with names of variables and his values */
     private Map<String, Double> VariablesTable = new HashMap<String, Double>();
 
-    private static final HashMap<String, Integer> operatorsPriority = new HashMap<String, Integer>() {
+    private static final HashMap<String, Integer> OperatorsPriority = new HashMap<String, Integer>() {
         {
             put("(", 0);
             put(")", 1);
@@ -26,6 +31,12 @@ public class ExpressionCalculator {
         }
     };
 
+    /**
+     * Transforms tokenized expression to postfix form
+     * 
+     * @param tokenizedExpression - splited expression
+     * @return returns tokenized postfix expression
+     */
     private static String[] toPostfix(String[] tokenizedExpression) {
         Stack<String> operatorsStack = new Stack<String>();
         List<String> result = new ArrayList<String>();
@@ -37,11 +48,11 @@ public class ExpressionCalculator {
                 while (!operatorsStack.peek().equals("("))
                     result.add(operatorsStack.pop());
                 operatorsStack.pop();
-            } else if (!operatorsPriority.containsKey(token)) {
+            } else if (!OperatorsPriority.containsKey(token)) {
                 result.add(token);
             } else {
                 while (!operatorsStack.isEmpty()
-                        && operatorsPriority.get(operatorsStack.peek()) >= operatorsPriority.get(token))
+                        && OperatorsPriority.get(operatorsStack.peek()) >= OperatorsPriority.get(token))
                     result.add(operatorsStack.pop());
 
                 operatorsStack.push(token);
@@ -54,17 +65,38 @@ public class ExpressionCalculator {
         return result.toArray(new String[0]);
     }
 
-    public ExpressionCalculator(String expression) {
+    /**
+     * Constructor - creating object to calculate an expression
+     * 
+     * @param expression - expression to calculate
+     * @throws InvalidExpressionFormatException - throws if expression has invalid
+     *                                          format
+     */
+    public ExpressionCalculator(String expression) throws InvalidExpressionFormatException {
         setExpression(expression);
     }
 
-    public ExpressionCalculator(){
-        setExpression("0");
+    /**
+     * Constructor - creating object with default expression (f = 0)
+     */
+    public ExpressionCalculator() {
+        ExpressionString = "0";
+        TokenizedExpression = new String[] { "0" };
+        PostfixExpression = new String[] { "0" };
+        VariablesTable.clear();
     }
 
-    public void setExpression(String expression) {
-        /*if (!MathExpressionValidator.validate(expression))
-            throw new InvalidExpressionException(); */
+    /**
+     * Set new expression for calculator
+     * 
+     * @param expression - string with expression
+     * @throws InvalidExpressionFormatException - throws if expression has invalid
+     *                                          format
+     */
+    public void setExpression(String expression) throws InvalidExpressionFormatException {
+        if (!MathExpressionValidator.validate(expression))
+            throw new InvalidExpressionFormatException();
+
         ExpressionString = expression;
         TokenizedExpression = MathExpressionUtility.tokenize(ExpressionString);
         PostfixExpression = toPostfix(TokenizedExpression);
@@ -74,14 +106,22 @@ public class ExpressionCalculator {
             VariablesTable.put(var, 0.0);
     }
 
-    public void setVariablesValue(Map<String, Double> variablesTable) {
-        VariablesTable = variablesTable;
-    }
-
+    /**
+     * Returns table with names and values of variables of seated expression.
+     * Strongly recommended not to add or remove values to table
+     * 
+     * @return returns map with variables
+     */
     public Map<String, Double> getVariablesTable() {
         return VariablesTable;
     }
 
+    /**
+     * Computes value of expression with values of variables from Variable Table.
+     * For not seated variables uses zero value.
+     * 
+     * @return returns expression value
+     */
     public Double compute() {
         String[] postfixExpressionToCompute = new String[PostfixExpression.length];
         for (int i = 0; i < PostfixExpression.length; i++) {
