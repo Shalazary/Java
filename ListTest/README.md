@@ -1,5 +1,8 @@
 # Performance results
 
+> Red for ArrayList
+> Blue for LinkedList
+
 - ## Add method
 
     - ### Add first  
