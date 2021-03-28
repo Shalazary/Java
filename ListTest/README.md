@@ -1,7 +1,7 @@
 # Performance results
 
-> Red for ArrayList
-> Blue for LinkedList
+> ## Red for ArrayList  
+> ## Blue for LinkedList  
 
 - ## Add method
 
