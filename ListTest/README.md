@@ -1,7 +1,9 @@
 # Performance results
 
-### ***Red for ArrayList***  
-### ***Blue for LinkedList***  
+> Ox - list size  
+> Oy - 1 operation lead time in ns  
+> Read chart for ArrayList  
+> Blue chart for LinkedList  
 
 - ## Add method
 
