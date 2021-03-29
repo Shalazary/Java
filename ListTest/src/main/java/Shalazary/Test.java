@@ -50,12 +50,11 @@ public class Test {
      * @param linkedListTest - function that will test performance of linked list
      * @throws IOException
      */
-    public static void listComparativeTest(String testname, int datasetSize, int timeThreshold,
-            Supplier<ArrayList<Integer>> arrayListSupplier, Supplier<LinkedList<Integer>> linkedListSupplier,
-            Function<ArrayList<Integer>, Long> arrayListTest, Function<LinkedList<Integer>, Long> linkedListTest)
-            throws IOException {
-        ArrayList<Integer> arrayList = arrayListSupplier.get();
-        LinkedList<Integer> linkedList = linkedListSupplier.get();
+    public static <T> void listComparativeTest(String testname, int datasetSize, int timeThreshold,
+            Supplier<ArrayList<T>> arrayListSupplier, Supplier<LinkedList<T>> linkedListSupplier,
+            Function<ArrayList<T>, Long> arrayListTest, Function<LinkedList<T>, Long> linkedListTest) throws IOException {
+        ArrayList<T> arrayList = arrayListSupplier.get();
+        LinkedList<T> linkedList = linkedListSupplier.get();
 
         XYSeries arrayListSeries = new XYSeries("ArrayList");
         XYSeries linkedListSeries = new XYSeries("LinkedList");
