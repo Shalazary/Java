@@ -16,6 +16,15 @@ import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
 public class Test {
+        /**
+         * Save charts from XY series to .png file
+         * @param filename - name of saved file
+         * @param serieses - serieses with data for charts
+         * @param title - chart title
+         * @param xAxisLabel - x axis lable
+         * @param yAxisLabel - y axis lable
+         * @throws IOException
+         */
     public static void printXYChart(String filename, XYSeries[] serieses, String title, String xAxisLabel, String yAxisLabel) throws IOException {
         XYSeriesCollection dataset = new XYSeriesCollection();
         for (XYSeries series : serieses)
@@ -25,12 +34,23 @@ public class Test {
 
         BufferedImage image = chart.createBufferedImage(3840, 2160);
 
-        FileOutputStream file = new FileOutputStream(filename + ".png");
+        FileOutputStream file = new FileOutputStream(filename.endsWith(".png") ? filename : filename + ".png");
         ImageIO.write(image, "png", file);
         file.close();
     }
 
-    public static void test(String testname, int datasetSize, int timeThreshold,
+    /**
+     * Comparison test suite for ArrayList and LinkedList displayed on chart
+     * @param testname - title for chart and file
+     * @param datasetSize - number of repetitions of test
+     * @param timeThreshold - time threshold to display on chart
+     * @param arrayListSupplier - array list supplier
+     * @param linkedListSupplier - linked list supplier
+     * @param arrayListTest - function that will test performance of array list
+     * @param linkedListTest - function that will test performance of linked list
+     * @throws IOException
+     */
+    public static void listComparativeTest(String testname, int datasetSize, int timeThreshold,
             Supplier<ArrayList<Integer>> arrayListSupplier, Supplier<LinkedList<Integer>> linkedListSupplier,
             Function<ArrayList<Integer>, Long> arrayListTest, Function<LinkedList<Integer>, Long> linkedListTest)
             throws IOException {
@@ -71,41 +91,41 @@ public class Test {
         TestBuilder<LinkedList<Integer>> linkedListTestBuilder = new TestBuilder<LinkedList<Integer>>();
 
         // Add
-        test("AddFirstTest", datasetSize, 1500, () -> new ArrayList<Integer>(), () -> new LinkedList<Integer>(),
+        listComparativeTest("AddFirstTest", datasetSize, 1500, () -> new ArrayList<Integer>(), () -> new LinkedList<Integer>(),
                 arrayListTestBuilder.build((ArrayList<Integer> l) -> l.add(0, 0)),
                 linkedListTestBuilder.build((LinkedList<Integer> l) -> l.addFirst(0)));
 
-        test("AddMiddleTest", datasetSize, 10000, () -> new ArrayList<Integer>(), () -> new LinkedList<Integer>(),
+        listComparativeTest("AddMiddleTest", datasetSize, 10000, () -> new ArrayList<Integer>(), () -> new LinkedList<Integer>(),
                 arrayListTestBuilder.build((ArrayList<Integer> l) -> l.add(l.size() / 2, 0)),
                 linkedListTestBuilder.build((LinkedList<Integer> l) -> l.add(l.size() / 2, 0)));
 
-        test("AddLastTest", datasetSize, 1500, () -> new ArrayList<Integer>(), () -> new LinkedList<Integer>(),
+        listComparativeTest("AddLastTest", datasetSize, 1500, () -> new ArrayList<Integer>(), () -> new LinkedList<Integer>(),
                 arrayListTestBuilder.build((ArrayList<Integer> l) -> l.add(l.size(), 0)),
                 linkedListTestBuilder.build((LinkedList<Integer> l) -> l.addLast(0)));
             
         // Get
-        test("GetFirstTest", datasetSize, 500, () -> new ArrayList<Integer>(), () -> new LinkedList<Integer>(),
+        listComparativeTest("GetFirstTest", datasetSize, 500, () -> new ArrayList<Integer>(), () -> new LinkedList<Integer>(),
                 arrayListTestBuilder.build((ArrayList<Integer> l) -> l.get(0), (ArrayList<Integer> l) -> l.add(0) , (ArrayList<Integer> l) -> {}),
                 linkedListTestBuilder.build((LinkedList<Integer> l) -> l.getFirst(), (LinkedList<Integer> l) -> l.addLast(0), (LinkedList<Integer> l) -> {}));
 
-        test("GetMiddleTest", datasetSize, 5000, () -> new ArrayList<Integer>(), () -> new LinkedList<Integer>(),
+        listComparativeTest("GetMiddleTest", datasetSize, 5000, () -> new ArrayList<Integer>(), () -> new LinkedList<Integer>(),
                 arrayListTestBuilder.build((ArrayList<Integer> l) -> l.get(l.size() / 2), (ArrayList<Integer> l) -> l.add(0) , (ArrayList<Integer> l) -> {}),
                 linkedListTestBuilder.build((LinkedList<Integer> l) -> l.get(l.size() / 2), (LinkedList<Integer> l) -> l.addLast(0), (LinkedList<Integer> l) -> {}));
 
-        test("GetLastTest", datasetSize, 500, () -> new ArrayList<Integer>(), () -> new LinkedList<Integer>(),
+        listComparativeTest("GetLastTest", datasetSize, 500, () -> new ArrayList<Integer>(), () -> new LinkedList<Integer>(),
                 arrayListTestBuilder.build((ArrayList<Integer> l) -> l.get(l.size() - 1), (ArrayList<Integer> l) -> l.add(0) , (ArrayList<Integer> l) -> {}),
                 linkedListTestBuilder.build((LinkedList<Integer> l) -> l.getLast(), (LinkedList<Integer> l) -> l.addLast(0), (LinkedList<Integer> l) -> {}));   
         
         // Remove
-        test("RemoveFirstTest", datasetSize, 500, () -> new ArrayList<Integer>(), () -> new LinkedList<Integer>(),
+        listComparativeTest("RemoveFirstTest", datasetSize, 500, () -> new ArrayList<Integer>(), () -> new LinkedList<Integer>(),
                 arrayListTestBuilder.build((ArrayList<Integer> l) -> l.remove(0), (ArrayList<Integer> l) -> l.add(0) , (ArrayList<Integer> l) -> l.add(0)),
                 linkedListTestBuilder.build((LinkedList<Integer> l) -> l.removeFirst(), (LinkedList<Integer> l) -> l.addLast(0), (LinkedList<Integer> l) -> l.addLast(0)));
         
-        test("RemoveMiddleTest", datasetSize, 5000, () -> new ArrayList<Integer>(), () -> new LinkedList<Integer>(),
+        listComparativeTest("RemoveMiddleTest", datasetSize, 5000, () -> new ArrayList<Integer>(), () -> new LinkedList<Integer>(),
                 arrayListTestBuilder.build((ArrayList<Integer> l) -> l.remove(l.size() / 2), (ArrayList<Integer> l) -> l.add(0) , (ArrayList<Integer> l) -> l.add(0)),
                 linkedListTestBuilder.build((LinkedList<Integer> l) -> l.remove(l.size() / 2), (LinkedList<Integer> l) -> l.addLast(0), (LinkedList<Integer> l) -> l.addLast(0)));
 
-        test("RemoveLastTest", datasetSize, 500, () -> new ArrayList<Integer>(), () -> new LinkedList<Integer>(),
+        listComparativeTest("RemoveLastTest", datasetSize, 500, () -> new ArrayList<Integer>(), () -> new LinkedList<Integer>(),
                 arrayListTestBuilder.build((ArrayList<Integer> l) -> l.remove(l.size() - 1), (ArrayList<Integer> l) -> l.add(0) , (ArrayList<Integer> l) -> l.add(0)),
                 linkedListTestBuilder.build((LinkedList<Integer> l) -> l.removeLast(), (LinkedList<Integer> l) -> l.addLast(0), (LinkedList<Integer> l) -> l.addLast(0)));
     }
