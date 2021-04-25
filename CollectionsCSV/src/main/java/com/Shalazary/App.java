@@ -27,10 +27,9 @@ public class App {
         DivisionMapper divisionMapper = new DivisionMapper();
         CustomCSVReader<Division> divisionReader = new CustomCSVReader<>(csvDivisionsReader, divisionMapper);
 
-        List<Division> divisionList = divisionReader.readAllToList();
-
         Map<String, Division> divisionsMap = new HashMap<>();
-        for(var division : divisionList)
+        Division division;
+        while ((division = divisionReader.readNext()) != null)
             divisionsMap.put(division.getName(), division);
 
         csvDivisionsReader.close();

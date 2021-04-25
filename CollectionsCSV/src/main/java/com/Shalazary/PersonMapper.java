@@ -5,7 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Map;
 
 public class PersonMapper extends Mapper<String[], Person> {
-    private Map<String, Division> divisionsMap;
+    private final Map<String, Division> divisionsMap;
 
     public PersonMapper(Map<String, Division> divisionsMap) {
         this.divisionsMap = divisionsMap;
