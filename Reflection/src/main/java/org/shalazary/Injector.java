@@ -22,6 +22,12 @@ public class Injector {
         this("defaultInjectorRules.properties");
     }
 
+    /**
+     * Injects into passed object implementations from injectorRules file
+     * @param injectableObject object that will be modified
+     * @param <T> type of passes object
+     * @throws InjectException
+     */
     public <T> void inject(T injectableObject) throws InjectException {
         Class<?> injectableObjectClass = injectableObject.getClass();
         Field[] injectableObjectFields = injectableObjectClass.getDeclaredFields();
@@ -29,9 +35,10 @@ public class Injector {
         for(Field field : injectableObjectFields) {
             if(field.getAnnotation(AutoInjectable.class) != null) {
                 Class<?> fieldClass = field.getType();
-                String implementationClassName = injectorRules.getProperty(field.getType().getName());
+
+                String implementationClassName = injectorRules.getProperty(fieldClass.getName());
                 if(implementationClassName == null)
-                    throw new InjectException("Not such interface for inject: " + field.getType().getName());
+                    throw new InjectException("Not such interface for inject: " + fieldClass.getName());
 
                 Class<?> implementationClass;
                 try {
@@ -44,7 +51,7 @@ public class Injector {
                 try {
                     implementationClassConstructors = implementationClass.getConstructor();
                 } catch (Exception e) {
-                    throw new InjectException(e.getMessage());
+                    throw new InjectException("Implementation " + implementationClassName + "dose not contains empty constructor");
                 }
 
                 Object implementation;
