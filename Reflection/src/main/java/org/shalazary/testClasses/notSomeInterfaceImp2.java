@@ -2,12 +2,12 @@ package org.shalazary.testClasses;
 
 public class notSomeInterfaceImp2 implements notSomeInterface {
     @Override
-    public void notSome1() {
-        System.out.println("NotSome1ver2");
+    public String notSome1() {
+        return "NotSome1ver2";
     }
 
     @Override
-    public void notSome2() {
-        System.out.println("NotSome2ver2");
+    public String notSome2() {
+        return "NotSome2ver2";
     }
 }

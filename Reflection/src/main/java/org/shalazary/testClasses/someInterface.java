@@ -1,6 +1,6 @@
 package org.shalazary.testClasses;
 
 public interface someInterface {
-    public void some1();
-    public void some2();
+    public String some1();
+    public String some2();
 }

@@ -9,9 +9,12 @@ public class mainTest {
     private notSomeInterface notSome;
 
     public void print(){
-        some.some1();
-        some.some2();
-        notSome.notSome1();
+        String res =
+        some.some1() + "\n" +
+        some.some2() +  "\n" +
+        notSome.notSome1() + "\n" +
         notSome.notSome2();
+
+        System.out.println(res);
     }
 }
