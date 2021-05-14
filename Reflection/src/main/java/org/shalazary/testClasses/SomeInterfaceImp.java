@@ -1,6 +1,6 @@
 package org.shalazary.testClasses;
 
-public class someInterfaceImp implements someInterface {
+public class SomeInterfaceImp implements SomeInterface {
     @Override
     public String some1() {
         return "Some1";
